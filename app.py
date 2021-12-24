@@ -58,14 +58,14 @@ def chatbot_response():
         else:
             res, tag, lst_entity = check_condition(tag, intents, msg, lst_entity)
 
-    for i in range(len(lst_entity)):
-        res = res.replace('{', '')
-        res = res.replace('}', '')
-        res = res.replace(list(lst_entity.keys())[i], list(lst_entity.values())[i])
+    # for i in range(len(lst_entity)):
+    #     res = res.replace('{', '')
+    #     res = res.replace('}', '')
+    #     res = res.replace(list(lst_entity.keys())[i], list(lst_entity.values())[i])
 
-    query = {"sender_id": ""}
+    query = {"sender_id": "1"}
     my_col.update_one(query, {"$set": {
-        "sender_id": "",
+        "sender_id": "1",
         "information": lst_entity,
         "pre_tag": tag
     }})

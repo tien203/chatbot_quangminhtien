@@ -10,17 +10,26 @@ def get_product_name_from_message(message):
         product_list.append(item['name'])
         product_detail.append(item)
     product_regex = r'(' + '|'.join(product_list) + r')'
+    product_regex = r'((\d+)?\s*(c[áa]i|b[ộo])?\s*{})'.format(product_regex)
     result = re.findall(product_regex, message)
+    print(result)
     detail = {}
     if result:
         for item in product_detail:
-            if item['name'] == result[0]:
+            if item['name'] == result[0][3]:
                 detail = item
-    if result:
-        result = result[0]
+        # result = result[0]
+        product_name = result[0][3]
+        amount = result[0][1]
+        price = detail['price']
+        if not amount:
+            amount = "1"
     else:
-        result = ""
-    return result, detail
+        product_name = ''
+        amount = ''
+        price = ''
+    
+    return product_name, amount, str(price)
 
 def get_phone_address_from_message(message):
     phone_regex = r'\b(08[1-9]\d{7}|09\d{8}|05[2|6|8|9]\d{7}|07[0|6|7|8|9]\d{7}|03[2-9]\d{7})\b'
@@ -36,7 +45,10 @@ def get_phone_address_from_message(message):
     else:
         address = ''
     return phone, address
+    
+def get_amount(message):
 
+    return amount
 
  
 # a,b = get_product_name_from_message('đầm caro bao nhiêu')

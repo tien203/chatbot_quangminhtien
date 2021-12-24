@@ -1,8 +1,9 @@
 from threading import Condition
 import pymongo, re
+import copy
 # import sys
 # sys.path.append('../api')
-from .api_get_product_information import get_product_name_from_message 
+from .get_information import get_product_name_from_message, get_phone_address_from_message
 import numpy as np
 client = pymongo.MongoClient("mongodb://mdbadmin:fwYHdDtTym6lNmyoiJPTfZzTW0jiokx5@aimdb.devhcm.local:30000/admin")
 my_db = client['chatbot_quangminhtien']
@@ -10,22 +11,30 @@ my_col = my_db['conversation']
 
 
 def check_condition(current_tag, intent_json, msg, lst_entity):
-    product_name, detail = get_product_name_from_message(msg)
-    if product_name:
-        lst_entity['product_name'] = product_name
-
-    query = {"sender_id": ""}
-    my_col.update_one(query, {"$set": {
-        "sender_id": "",
-        "information": lst_entity,
-        "pre_tag": current_tag
-    }})
-
     document = my_col.find({}, {"_id":0})
     conversation_info = []
     for item in document:
         conversation_info.append(item)
     conversation_info = conversation_info[-1]['information']
+
+    lst_entity['product_name'], lst_entity['amount'], lst_entity['price']  = get_product_name_from_message(msg)
+    lst_entity['phone_number'], lst_entity['address'] = get_phone_address_from_message(msg)
+
+    info_clone = copy.deepcopy(conversation_info)
+    for entity in info_clone:
+        if not conversation_info[entity] or lst_entity[entity]:
+            conversation_info[entity] = lst_entity[entity]
+
+    # if product_name:
+    #     lst_entity['product_name'] = product_name
+    query = {"sender_id": "1"}
+    my_col.update_one(query, {"$set": {
+        "sender_id": "1",
+        "information": conversation_info,
+        "pre_tag": current_tag
+    }})
+
+
 
     for i in intent_json['intents']:
         if i['tag']==current_tag:
@@ -35,6 +44,7 @@ def check_condition(current_tag, intent_json, msg, lst_entity):
         flag = False
         if 'condition' in block and block['condition']:
             for key, value in block['condition'].items():
+                print(value, key)
                 count = 0
                 for k, v in value.items():
                     if (v and conversation_info[k]) or (not v and not conversation_info[k]):
@@ -44,16 +54,18 @@ def check_condition(current_tag, intent_json, msg, lst_entity):
                         if intent_json['intents'][index]['tag'] == key:
                             block = intent_json['intents'][index]
                             break
+                    else:
+                        continue
+                    break
+
     res = np.random.choice(block['responses'])
-    
-    # lst_entity = {'product_name':product_name}
     check_entity = r'((?<=\{).*?(?=\}))'
     entity = re.findall(check_entity, res)
-    for i in range(len(lst_entity)):
+    for i in range(len(conversation_info)):
         res = res.replace('{', '')
         res = res.replace('}', '')
-        res = res.replace(list(lst_entity.keys())[i], list(lst_entity.values())[i])
-    return res, block['tag'], lst_entity
+        res = res.replace(list(conversation_info.keys())[i], list(conversation_info.values())[i])
+    return res, block['tag'], conversation_info
 
 # import json
 # with open(r'C:\Users\TMT\Desktop\An-AI-Chatbot-in-Python-and-Flask\intents.json', encoding='utf-8') as fh:

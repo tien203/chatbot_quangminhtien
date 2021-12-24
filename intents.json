@@ -38,11 +38,6 @@
             "condition": []
         },
         {
-            "tag": "deal",
-            "patterns": ["24 Nguyễn Gia Thiều tp Vũng Tàu 0372066464", "0372066464 24 Nguyễn Gia Thiều tp Vũng Tàu"],
-            "responses": ["Dạ đơn hàng của chị là.1 set xanh cổ chữ V giá 195k size M. Ship 30k. Tổng 225k. Người Nhận Trần phương.Sđt Địa chỉ 24 Nguyễn Gia Thiều p12 tp Vũng Tàu.Tầm 3-4 hôm chị nhận được hàng ạ.Được kt hàng trước khi nhận ạ"]
-        },
-        {
             "tag": "ship_fee",
             "patterns": ["Phí ship hà nội bn ạ", "phí ship", "ship quận 10 bao nhiêu", "ship bn"],
             "responses": ["Dạ phí ship tầm 20-30k tùy khu vực ạ"]
@@ -94,7 +89,52 @@
             "tag": "order",
             "patterns": ["Cho mình 1 bộ sz S đến trường tiểu học Đồng Tâm, ngõ 128c Đại La, quận Hai Bà Trưng, HN", 
                 "Lay size L", "Ship c váy này size M nhé", "chốt đơn nhé", "lên đơn cho em", "ok chốt"],
-            "responses": ["chị đặt hàng cho sh xin sđt và địa chỉ nhé"]
+            "responses": [],
+            "condition": {
+                "a_order_miss_product": {
+                    "product_name": 0
+                },
+                "order_miss_phone": {
+                    "phone_number": 0
+                },
+                "order_miss_address": {
+                    "address": 0
+                },
+                "deal": {
+                    "phone_number": 1,
+                    "address": 1,
+                    "product_name": 1
+                }
+            }
+        },
+        {
+            "tag": "a_order_miss_product",
+            "patterns": [],
+            "responses": ["Chị lấy sản phẩm nào ạ."],
+            "condition": {
+                "order": {}
+            }
+        },
+        {
+            "tag": "order_miss_phone",
+            "patterns": [],
+            "responses": ["Chị cho em xin số điện thoại nhe."],
+            "condition": {
+                "order": {}
+            }
+        },
+        {
+            "tag": "order_miss_address",
+            "patterns": [],
+            "responses": ["Chị cho em xin địa chỉ nhé."],
+            "condition": {
+                "order": {}
+            }
+        },
+        {
+            "tag": "deal",
+            "patterns": [],
+            "responses": ["Dạ đơn hàng của chị là {amount} {product_name} giá {price}k size M. Số điện thoại {phone_number} Địa chỉ {address}. Tầm 3-4 hôm chị nhận được hàng ạ.Được kt hàng trước khi nhận ạ"]
         }
     ]
 }
