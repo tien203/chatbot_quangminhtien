@@ -22,6 +22,22 @@ def get_product_name_from_message(message):
         result = ""
     return result, detail
 
+def get_phone_address_from_message(message):
+    phone_regex = r'\b(08[1-9]\d{7}|09\d{8}|05[2|6|8|9]\d{7}|07[0|6|7|8|9]\d{7}|03[2-9]\d{7})\b'
+    phone = re.findall(phone_regex, message)
+    if phone:
+        phone = phone[0]
+    else:
+        phone = ''
+    address_regex = r'\b(địa\s*chỉ|dia\s*chi)\b'
+    if re.search(address_regex, message):
+        address_idx = re.search(address_regex, message).span()[1]
+        address = message[address_idx:].strip()
+    else:
+        address = ''
+    return phone, address
+
+
  
 # a,b = get_product_name_from_message('đầm caro bao nhiêu')
 # print(a, b)
