@@ -9,6 +9,17 @@ client = pymongo.MongoClient("mongodb://mdbadmin:fwYHdDtTym6lNmyoiJPTfZzTW0jiokx
 my_db = client['chatbot_quangminhtien']
 my_col = my_db['conversation']
 
+def reset_conversation():
+    query = {"sender_id": "1"}
+    document = my_col.find_one(query, {"_id":0})
+    update_doc = {}
+    if document:
+        for key in document['information'].keys():
+            update_doc[key] = ''
+        my_col.update_one(query, {"$set": {
+        "information": update_doc
+    }})
+    return {"result":"Successfully"}
 
 def check_condition(current_tag, intent_json, msg, lst_entity):
     document = my_col.find({}, {"_id":0})
@@ -17,7 +28,7 @@ def check_condition(current_tag, intent_json, msg, lst_entity):
         conversation_info.append(item)
     conversation_info = conversation_info[-1]['information']
 
-    lst_entity['product_name'], lst_entity['amount'], lst_entity['price']  = get_product_name_from_message(msg)
+    lst_entity['product_name'], lst_entity['amount'], lst_entity['price'], lst_entity['total']  = get_product_name_from_message(msg)
     lst_entity['phone_number'], lst_entity['address'] = get_phone_address_from_message(msg)
 
     info_clone = copy.deepcopy(conversation_info)
@@ -67,6 +78,7 @@ def check_condition(current_tag, intent_json, msg, lst_entity):
         res = res.replace(list(conversation_info.keys())[i], list(conversation_info.values())[i])
     return res, block['tag'], conversation_info
 
+reset_conversation()
 # import json
 # with open(r'C:\Users\TMT\Desktop\An-AI-Chatbot-in-Python-and-Flask\intents.json', encoding='utf-8') as fh:
 #     intents = json.load(fh)

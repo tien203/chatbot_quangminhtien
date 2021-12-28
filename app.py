@@ -18,7 +18,7 @@ import nltk
 from keras.models import load_model
 from nltk.stem import WordNetLemmatizer
 lemmatizer = WordNetLemmatizer()
-from backend.process.product_handler import check_condition
+from backend.process.product_handler import check_condition, reset_conversation
 # chat initialization
 model = load_model("chatbot_model.h5")
 # intents = json.loads(open("intents.json").read())
@@ -33,6 +33,10 @@ run_with_ngrok(app)
 @app.route("/")
 def home():
     return render_template("index.html")
+
+@app.route("/reset", methods=["GET"])
+def reset():
+    return reset_conversation()
 
 
 @app.route("/get", methods=["POST"])

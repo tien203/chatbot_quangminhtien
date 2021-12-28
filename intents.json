@@ -49,7 +49,7 @@
         },
         {
             "tag": "ask_price",
-            "patterns": ["Bộ này bn vậy shop?", "này bao nhiêu", "giá bao nhiêu"],
+            "patterns": ["Bộ này bn vậy shop?", "này bao nhiêu", "giá bao nhiêu", "giá bn", "bn vậy shop", "giá bn vậy"],
             "responses": [],
             "condition": {
                 "ask_price_dont_have_product": {
@@ -64,7 +64,7 @@
         {
             "tag": "ask_price_have_product",
             "patterns": [],
-            "responses": ["Hi chị mẫu {product_name} có giá 380k giảm còn 195k.Mẫu có 3 size S M L.Được kt hàng trước khi nhận ạ.Chị cho e xin cân nặng chiều cao em tư vấn size chị nhé!!."],
+            "responses": ["Hi chị mẫu {product_name} có giá là {price}k. Mẫu có 3 size S M L. Được kt hàng trước khi nhận ạ. Chị lấy size gì vậy chị."],
             "condition": []
         },
         {
@@ -88,7 +88,7 @@
         {
             "tag": "order",
             "patterns": ["Cho mình 1 bộ sz S đến trường tiểu học Đồng Tâm, ngõ 128c Đại La, quận Hai Bà Trưng, HN", 
-                "Lay size L", "Ship c váy này size M nhé", "chốt đơn nhé", "lên đơn cho em", "ok chốt"],
+                "Lay size L", "Ship c váy này size M nhé", "chốt đơn nhé", "lên đơn cho em", "ok chốt", "lấy 1 cái", "lấy 1 bộ"],
             "responses": [],
             "condition": {
                 "a_order_miss_product": {
@@ -134,7 +134,7 @@
         {
             "tag": "deal",
             "patterns": [],
-            "responses": ["Dạ đơn hàng của chị là {amount} {product_name} giá {price}k size M. Số điện thoại {phone_number} Địa chỉ {address}. Tầm 3-4 hôm chị nhận được hàng ạ.Được kt hàng trước khi nhận ạ"]
+            "responses": ["Dạ đơn hàng của chị là {amount} {product_name} giá {price}k size M. Tổng cộng {total}k. Số điện thoại {phone_number} Địa chỉ {address}. Tầm 3-4 hôm chị nhận được hàng ạ.Được kt hàng trước khi nhận ạ"]
         }
     ]
 }

@@ -24,12 +24,14 @@ def get_product_name_from_message(message):
         price = detail['price']
         if not amount:
             amount = "1"
+        total = str(int(price)*int(amount))
     else:
         product_name = ''
         amount = ''
         price = ''
+        total = ''
     
-    return product_name, amount, str(price)
+    return product_name, amount, str(price), total
 
 def get_phone_address_from_message(message):
     phone_regex = r'\b(08[1-9]\d{7}|09\d{8}|05[2|6|8|9]\d{7}|07[0|6|7|8|9]\d{7}|03[2-9]\d{7})\b'
@@ -46,9 +48,9 @@ def get_phone_address_from_message(message):
         address = ''
     return phone, address
     
-def get_amount(message):
+# def get_amount(message):
 
-    return amount
+#     return amount
 
  
 # a,b = get_product_name_from_message('đầm caro bao nhiêu')
